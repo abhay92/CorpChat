@@ -1,11 +1,14 @@
 package helper;
 
+import javax.swing.JFrame;
 import beans.UserMasterBean;
 import dbHandler.DbConnection;
+import gui.AdminPage;
+import gui.UserPage;
 
 public class LoginAuthentication {
 
-	public static int authenticate(String uname, String pwd)
+	public static JFrame authenticate(String uname, String pwd)
 	{
 		int resultCode = 0;
 		
@@ -26,6 +29,20 @@ public class LoginAuthentication {
 		{
 			resultCode = 0;
 		}
-		return resultCode;
+		return getNextWindow(resultCode);
+	}
+	
+	private static JFrame getNextWindow(int result)
+	{
+		if (result == 1)
+		{
+			return new AdminPage();
+		}
+		else if(result == 2)
+		{
+			return new UserPage();
+		}
+			
+		return null;
 	}
 }

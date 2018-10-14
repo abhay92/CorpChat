@@ -9,65 +9,80 @@ import java.awt.event.*;
 	  
 	public class LoginPage extends JFrame implements ActionListener
 	 {
-	  JButton SUBMIT, CANCEL;
-	  JPanel panel;
-	  JLabel label1,label2;
-	  final JTextField  text1,text2;
+	  private JButton SUBMIT, CANCEL;
+	  private JPanel detailsPanel;
+	  private JPanel buttonPanel;
+	  private JLabel usernameLbl,passwordLbl;
+	  private JTextField  usernameTf,passwordTf;
+	  private GridBagConstraints gridConstraint;
 	   
 	  public LoginPage()
 	   {
-	   label1 = new JLabel();
-	   label1.setText("Username:");
-	   text1 = new JTextField(15);
-
-	   label2 = new JLabel();
-	   label2.setText("Password:");
-	   text2 = new JPasswordField(15);
-	  
-	   SUBMIT=new JButton("SUBMIT");
-	   CANCEL = new JButton("CANCEL");
+	   usernameLbl = new JLabel();
+	   usernameLbl.setText("Username:");
+	   usernameLbl.setFont(new Font("Courier New", Font.BOLD, 40));
+	   usernameLbl.setForeground(Color.GRAY);
 	   
-	   panel=new JPanel(new GridLayout(3,1));
-	   panel.add(label1);
-	   panel.add(text1);
-	   panel.add(label2);
-	   panel.add(text2);
-	   panel.add(SUBMIT);
-	   panel.add(CANCEL);
-	   add(panel,BorderLayout.CENTER);
+	   usernameTf = new JTextField(15);
+	   
+	   passwordLbl = new JLabel();
+	   passwordLbl.setText("Password:");
+	   passwordLbl.setFont(new Font("Courier New", Font.BOLD, 40));
+	   passwordLbl.setForeground(Color.GRAY);
+  	   
+	   passwordTf = new JPasswordField(15);
+	   
+	   detailsPanel = new JPanel(new GridLayout(2,2));
+	   detailsPanel.add(usernameLbl);
+	   detailsPanel.add(usernameTf);
+	   detailsPanel.add(passwordLbl);
+	   detailsPanel.add(passwordTf);
+	   add(detailsPanel,BorderLayout.CENTER);
+	   
+	   buttonPanel = new JPanel(new GridLayout(1,2));
+	   gridConstraint = new GridBagConstraints();
+	   SUBMIT = new JButton("SUBMIT");
+	   gridConstraint.gridx = 5;
+	   gridConstraint.gridy = 3;
+	   gridConstraint.insets = new Insets(10,10,10,10);
+	   buttonPanel.add(SUBMIT, gridConstraint);
+	   
+	   CANCEL = new JButton("CANCEL");
+	   gridConstraint.gridx = 0;
+	   gridConstraint.gridy = 0;
+	   buttonPanel.add(CANCEL, gridConstraint);
+	   
+	   add(buttonPanel,BorderLayout.CENTER);
+	   
 	   SUBMIT.addActionListener(this);
 	   CANCEL.addActionListener(this);
 	   setTitle("LOGIN FORM");
+	   
+	   setSize(1000, 600);
+	   setResizable(false);
+	  
+	   setLayout(new GridLayout(2,1));
+       
 	   }
 	  public void actionPerformed(ActionEvent ae)
 	   {
 		  if(ae.getSource() == SUBMIT)
 		  {
-			   String uname=text1.getText();
-			   String pwd=text2.getText();
-			   int result = LoginAuthentication.authenticate(uname, pwd);
+			   String uname=usernameTf.getText();
+			   String pwd=passwordTf.getText();
+			   Frame nextPage = LoginAuthentication.authenticate(uname, pwd);
 			   
-			   switch(result)
+			   if(nextPage == null)
 			   {
-			   case 1:
-				   System.out.println("ADMIN");
-				   break;
-				   
-			   case 2:
-				   System.out.println("CLIENT");
-				   break;
-				   
-			   default:
-				   JOptionPane.showMessageDialog(this,"Invalid username or password",
+			   	   JOptionPane.showMessageDialog(this,"Invalid username or password",
 						   "Error",JOptionPane.ERROR_MESSAGE);
-						   
-				   break;
-					   
-			   }			 
-		  }
-		  else
-		  {
-			dispose();
+			   }
+			   else
+			   {
+				   this.setVisible(false);
+				   dispose();
+				   nextPage.setVisible(true);
+			   }
 		  }
 	  }
 }

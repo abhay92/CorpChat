@@ -10,7 +10,7 @@ public class Main {
 	   try
 	   {
 	   LoginPage frame=new LoginPage();
-	   frame.setSize(300,100);
+	   frame.setSize(500,200);
 	   frame.setVisible(true);
 	   frame.setDefaultCloseOperation(javax.swing.
 			   WindowConstants.DISPOSE_ON_CLOSE);	 

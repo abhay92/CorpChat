@@ -9,7 +9,7 @@ public class UserMasterBean {
 	private String status;
 	private String name;
 	
-	UserMasterBean()
+	public UserMasterBean()
 	{
 		
 	}
