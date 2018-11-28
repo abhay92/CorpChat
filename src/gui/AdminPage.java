@@ -13,6 +13,7 @@ import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
+import beans.UserMasterBean;
 import helper.ServerHelper;
 import server.Server;
 
@@ -22,12 +23,14 @@ public class AdminPage extends JFrame implements ActionListener {
 	private GridBagConstraints gridConstraint;
 	private JPanel buttonPanel;
 	private JButton startServerButton, stopServerButton, chatButton;
-	private UserPage chatWindow = new UserPage();
+	private UserPage chatWindow;
+  	private UserMasterBean userData;
   	
-	public AdminPage()
+	public AdminPage(UserMasterBean userData)
 	{
 		initFrame();
 		initComponents();
+		this.userData = userData;
 	}
 
 	private void initFrame()
@@ -38,8 +41,18 @@ public class AdminPage extends JFrame implements ActionListener {
 			setTitle(pageTitle);
 			setResizable(false);
 			setLayout(new GridLayout(2,1));
-			setDefaultCloseOperation(javax.swing.
-					WindowConstants.DISPOSE_ON_CLOSE);	 
+			addWindowListener(new java.awt.event.WindowAdapter() {
+			    @Override
+			    public void windowClosing(java.awt.event.WindowEvent windowEvent) {
+			    	try {
+						ServerHelper.getServer().stopServer();
+					} 
+					catch (IOException e1) 
+					{
+						e1.printStackTrace();
+					}
+			    }
+			});	 
 		}
 		catch(Exception e)
 		{
@@ -101,7 +114,22 @@ public class AdminPage extends JFrame implements ActionListener {
 		}
 		else
 		{
-			chatWindow.setVisible(true);
+			getChatWindow().setVisible(true);
 		}
 	}
+	
+	private UserMasterBean getUserData(){
+		return userData;
+	}
+	
+	private UserPage getChatWindow()
+	{
+		if(chatWindow == null)
+		{
+			chatWindow = new UserPage(getUserData()); 
+		}
+		
+		return chatWindow;
+	}
+	
 }

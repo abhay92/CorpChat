@@ -12,11 +12,11 @@ public class LoginAuthentication {
 	{
 		int resultCode = 0;
 		
-		UserMasterBean result = DbConnection.getResult(uname, pwd);
+		UserMasterBean userData = DbConnection.getResult(uname, pwd);
 		
-		if (result != null)
+		if (userData != null)
 		{
-			if (result.getUserType().equals("Administrator"))
+			if (userData.getUserType().equals("Administrator"))
 			{
 				resultCode = 1;
 			}
@@ -29,18 +29,18 @@ public class LoginAuthentication {
 		{
 			resultCode = 0;
 		}
-		return getNextWindow(resultCode);
+		return getNextWindow(resultCode, userData);
 	}
 	
-	private static JFrame getNextWindow(int result)
+	private static JFrame getNextWindow(int result, UserMasterBean userData)
 	{
 		if (result == 1)
 		{
-			return new AdminPage();
+			return new AdminPage(userData);
 		}
 		else if(result == 2)
 		{
-			return new UserPage();
+			return new UserPage(userData);
 		}
 			
 		return null;
